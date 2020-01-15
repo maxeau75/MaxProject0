@@ -1,91 +1,60 @@
 package Cars;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
+import base.User;
+import base.test;
 
+// All our methods are save in car dealership class
 public class CarDealership {
-
 	private static Scanner sc = new Scanner(System.in);
 
-	/**
-	 * @param args the command line arguments
-	 */
-	public static void main(String[] args) throws Exception {
-
-		ArrayList<Car> cars = new ArrayList<>();
-		Car newCar = new Car("536212", "Crysler", "X100", 2015, 86545, 85647.00F);
-		cars.add(newCar);
-		cars.add(new Car("785537", "Mercedez", "ML 350", 5150, 65452, 45000.00F));
-		cars.add(new Car("548566", "Toyota", "Carolla", 2000, 5000, 19000.00F));
-		cars.add(new Car("422345", "BMW", "X5", 2010, 15000, 1900.00F));
-		cars.add(new Car("345681", "Toyota", "Camry", 2000, 5000, 1900.00F));
-		cars.add(new Car("546798", "Lexus", "ES300", 2002, 4000, 1900.00F));
-		cars.add(new Car("907856", "Buick", "Encore", 2020, 5000, 40000.00F));
-	
-
-		new FileOutputStream("myCars.txt", true).close();
-		int menuOption = 0;
-		System.out.println("Welcome to Maxeau Dealership please pick from the following options (Press 0 for menu)");
-		displayMenu1();
-		displayMenu2();
-		do {
-			System.out.println("\n\nWhat would you like to do? (0 for main menu)");
-			menuOption = sc.nextInt();
-			while (menuOption < 0 || menuOption > 6) {
-				System.out.println("Please enter a correct menu option.(0 to see the menu)");
-				menuOption = sc.nextInt();
-			}
-			doMenuOption(menuOption, cars);
-
-		} while (menuOption != 6);
-
-		FileOutputStream fos = new FileOutputStream("myCars.txt");
-		ObjectOutputStream oos = new ObjectOutputStream(fos);
-		for (Car car : cars) {
-			oos.writeObject(car);
-		}
-		fos.close();
-
-	}
-
+	// All our logic for customer
 	public static void displayMenu1() {
 		System.out.println("What would you like to do?");
 		System.out.println("----------------------------------------------------------------");
 		System.out.println("1. Show all existing car records in the database (in any order).");
-		System.out.println("4. Search for a car (given its VIN).");
-		System.out.println("5. Show a list of cars within a given price range.");
-		System.out.println("6. Exit program.\n\n");
+		System.out.println("2. Make an offer for a car.");
+		System.out.println("3. View the cars that I own.");
+		System.out.println("4. View my remaining payments for a car.");
+		System.out.println("5. Exit program.\n\n");
 	}
-	
+
+	// All our logic for employee
 	public static void displayMenu2() {
 		System.out.println("What would you like to do?");
 		System.out.println("----------------------------------------------------------------");
 		System.out.println("1. Show all existing car records in the database (in any order).");
 		System.out.println("2. Add a new car record to the database.");
-		System.out.println("3. Delete a car record from a database.");
-		System.out.println("4. Search for a car (given its VIN).");
-		System.out.println("5. Show a list of cars within a given price range.");
+		System.out.println("3. Can accept or reject an offer for a car.");
+		System.out.println("4. Delete a car record from a database.");
+		System.out.println("5. Can view all payments.");
 		System.out.println("6. Exit program.\n\n");
 	}
 
 	public static void displayCars(ArrayList<Car> cars) {
 		String formatter = "| %-2d | %-6s | %-15s | %-15s | %-5d | %-8d | $%.2f   |%n";
-		System.out.format("----------------------------------------------------------------------------%n");
+		System.out.format("+----+--------+-----------------+-----------------+-------+----------+------------+%n");
 		System.out.printf("| #  | VIN    | Make            | Model           | Year  | Mileage  | Price      |%n");
-		System.out.format("---------------------------------------------------------------------------%n");
+		System.out.format("+----+--------+-----------------+-----------------+-------+----------+------------+%n");
 		int i = 0;
 		for (Car car : cars) {
 			System.out.format(formatter, ++i, car.getVIN(), car.getMake(), car.getModel(), car.getYear(),
 					car.getMileage(), car.getPrice());
 		}
-		System.out.format("---------------------------------------------------------------------------");
+		System.out.format("+----+--------+-----------------+-----------------+-------+----------+------------+%n");
 	}
 
 	public static void displayCars(Car car) {
 		String formatter = "| %-2d | %-6s | %-15s | %-15s | %-5d | %-8d | $%.2f   |%n";
-		System.out.format("---------------------------------------------------------------------------+%n");
+		System.out.format("+----+--------+-----------------+-----------------+-------+----------+------------+%n");
 		System.out.printf("| #  | VIN    | Make            | Model           | Year  | Mileage  | Price      |%n");
 		System.out.format("+----+--------+-----------------+-----------------+-------+----------+------------+%n");
 		System.out.format(formatter, 1, car.getVIN(), car.getMake(), car.getModel(), car.getYear(), car.getMileage(),
@@ -93,7 +62,7 @@ public class CarDealership {
 		System.out.format("+----+--------+-----------------+-----------------+-------+----------+------------+%n");
 	}
 
-	public static void doMenuOption(int action, ArrayList<Car> cars) throws Exception {
+	public static void doMenuOption1(int action, ArrayList<Car> cars) throws Exception {
 		String newCar, VIN, make, model;
 		Car foundCar = null;
 		int carNumber = 0, year = 0, mileage = 0;
@@ -103,6 +72,45 @@ public class CarDealership {
 		case 0:
 			System.out.println("Main Menu");
 			displayMenu1();
+			break;
+		case 1:
+			System.out.println("List of Cars");
+			displayCars(cars);
+			break;
+		case 2:
+			System.out.println("Make an offer for a car.");
+			System.out.println("Method is in development");
+			searchCar(cars);// We can search for a car by VIN Number and make an offer 
+			//Method is not yet develop
+			break;
+		case 3:
+			System.out.println("View my remaining payments for a car.");
+			System.out.println("Method is not yet develop");
+			//Method is not yet develop
+			break;
+		case 4:
+			System.out.println("List of cars by given price range.");
+			System.out.println("Method is not yet develop");
+			//Method is not yet develop
+			break;
+		case 5:
+			break;
+		default:
+			break;
+
+		}
+
+	}
+	
+	public static void doMenuOption2(int action, ArrayList<Car> cars) throws Exception {
+		String newCar, VIN, make, model;
+		Car foundCar = null;
+		int carNumber = 0, year = 0, mileage = 0;
+		float priceMin = 0.00F, priceMax = 0.00F, price = 0.00F;
+		boolean validInput = true;
+		switch (action) {
+		case 0:
+			System.out.println("Main Menu");
 			displayMenu2();
 			break;
 		case 1:
@@ -114,16 +122,18 @@ public class CarDealership {
 			addNewCar(cars);
 			break;
 		case 3:
+			System.out.println("Can accept or reject an offer for a car.");
+			System.out.println("Method is not yet develop");
+			//Method is not yet develop
+			break;
+		case 4:
 			System.out.println("Delete a car from a database.");
 			deleteCar(cars);
 			break;
-		case 4:
-			System.out.println("Search for a Car.");
-			searchCar(cars);
-			break;
 		case 5:
-			System.out.println("List of cars by given price range.");
-			listCarByPriceRange(cars);
+			System.out.println("Can view all payments.");
+			System.out.println("Method is not yet develop");
+			//Method is not yet develop
 			break;
 		case 6:
 			break;
@@ -192,7 +202,8 @@ public class CarDealership {
 			System.out.println("There are no cars to remove.");
 	}
 
-	public static void searchCar(ArrayList<Car> cars) {
+	public static void searchCar(ArrayList<Car> cars) 
+	{
 		String VIN;
 		Car foundCar = null;
 
@@ -204,10 +215,13 @@ public class CarDealership {
 		for (Car car : cars) {
 			if (car.getVIN().equals(VIN)) {
 				foundCar = car;
+				System.out.println("My offer for this car is: " + (car.getPrice()-500));
+				
 			}
 		}
 		if (foundCar != null)
 			displayCars(foundCar);
+			
 		else
 			System.out.println("No Cars found.");
 	}
@@ -233,4 +247,9 @@ public class CarDealership {
 			System.out.println(priceMin + " " + priceMax);
 		} while (priceMin > priceMax);
 	}
+	
+	
+	
+		
 }
+

@@ -11,7 +11,7 @@ public class Car implements Serializable {
 	Car() {
 	}; // default constructor
 
-	Car(String VIN, String make, String model, int year, int mileage, float price) {
+	public Car(String VIN, String make, String model, int year, int mileage, float price) {
 		this.VIN = VIN;
 		this.make = make;
 		this.model = model;
@@ -30,6 +30,7 @@ public class Car implements Serializable {
 		return true;
 	}
 
+	//All the getter are saved here
 	public String getVIN() {
 		return VIN;
 	}
